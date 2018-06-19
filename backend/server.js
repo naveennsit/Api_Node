@@ -21,9 +21,9 @@ app.get('/posts/:id', async (req, res) => {
     res.send(posts);
 })
 
-app.post('/post', (req, res) => {
+app.post('/post',auth.checkAuthenticated, (req, res) => {
     var postData = req.body;
-    postData.author = '5b286203454fd02d9079e675';
+    postData.author = req.userId;
 
     var post = new Post(postData);
 
@@ -61,7 +61,7 @@ mongoose.connect('mongodb://naveen:naveensharma12@ds163630.mlab.com:63630/nsitst
     if (!err)
         console.log('connected to mongo');
 })
-app.use('/auth', auth);
+app.use('/auth', auth.router);
 
 app.listen(3000, () => {
     console.log('server is started ');
